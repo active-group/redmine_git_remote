@@ -42,7 +42,7 @@ class Repository::GitRemote < Repository::Git
     #  user@server:project.git
     #  server:project.git
     # For simplicity we just assume if it's not HTTP(S), then it's SSH.
-    !clone_url.match(/^http/)
+    !clone_url.start_with?("http")
   end
 
   # Hook into Repository.fetch_changesets to also run 'git fetch'.
@@ -161,7 +161,7 @@ class Repository::GitRemote < Repository::Git
     # if not found...
     out, status = RedmineGitRemote::PoorMansCapture3::capture2("ssh-keygen", "-F", host)
     raise "Unable to run 'ssh-keygen -F #{host}" unless status
-    unless out.match /found/
+    unless out.match?(/found/)
       # hack to work with 'docker exec' where HOME isn't set (or set to /)
       ssh_dir = (ENV['HOME'] == "/" || ENV['HOME'] == nil ? "/root" : ENV['HOME']) + "/.ssh"
       ssh_known_hosts = ssh_dir + "/known_hosts"
