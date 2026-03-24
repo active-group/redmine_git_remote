@@ -1,8 +1,8 @@
 require 'redmine/scm/adapters/git_adapter'
 require 'pathname'
 require 'fileutils'
-# require 'open3'
-require_dependency 'redmine_git_remote/poor_mans_capture3'
+require 'open3'
+require 'redmine_git_remote/poor_mans_capture3'
 
 class Repository::GitRemote < Repository::Git
 
@@ -74,7 +74,7 @@ class Repository::GitRemote < Repository::Git
   # called in before_validate handler, sets form errors
   def initialize_clone
     # avoids crash in RepositoriesController#destroy
-    return unless attributes["extra_info"]["extra_clone_url"]
+    return unless attributes["extra_info"] && attributes["extra_info"]["extra_clone_url"]
 
     p = parse(attributes["extra_info"]["extra_clone_url"])
     self.identifier = p[:identifier] if identifier.empty?
@@ -100,7 +100,7 @@ class Repository::GitRemote < Repository::Git
       return "#{clone_url} is not a valid remote."
     end
 
-    if Dir.exists? clone_path
+    if Dir.exist? clone_path
       existing_repo_remote, status = RedmineGitRemote::PoorMansCapture3::capture2("git", "--git-dir", clone_path, "config", "--get", "remote.origin.url")
       return "Unable to run: git --git-dir #{clone_path} config --get remote.origin.url" unless status.success?
 
@@ -118,7 +118,6 @@ class Repository::GitRemote < Repository::Git
     end
   end
 
-  unloadable
   def self.scm_name
     'GitRemote'
   end
@@ -175,7 +174,7 @@ class Repository::GitRemote < Repository::Git
       puts "Adding #{host} to #{ssh_known_hosts}"
       out, status = RedmineGitRemote::PoorMansCapture3::capture2("ssh-keyscan", host)
       raise "Unable to run 'ssh-keyscan #{host}'" unless status
-      Kernel::open(ssh_known_hosts, 'a') { |f| f.puts out}
+      File.open(ssh_known_hosts, 'a') { |f| f.puts out}
     end
   end
 end

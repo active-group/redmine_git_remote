@@ -82,7 +82,7 @@ cd /home/redmine/redmine && ./bin/rails runner "Repository.fetch_changesets" -e 
 
 Notes:
 
-* Tested on Redmine 3.4 and ruby 2.3
+* Tested on Redmine 3.4+ (including 5.x/6.x) and Ruby 2.3+ (including 3.x)
 * Currently alpha state, use at your own risk. Given possible security risks of shelling out,
   we recommend using this plugin only if all RedMine project admins are trusted users.
 * This plugin doesn't clean-up (delete) cloned repos from the file system when the record
