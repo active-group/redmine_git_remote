@@ -1,6 +1,7 @@
 require 'redmine'
 
 $LOAD_PATH.unshift File.join(File.dirname(__FILE__), 'lib')
+require 'redmine_git_remote/repositories_helper_patch'
 
 Redmine::Scm::Base.add "GitRemote"
 
@@ -16,7 +17,6 @@ Redmine::Plugin.register :redmine_git_remote do
   }, :partial => 'settings/git_remote_settings'
 end
 
-Rails.application.config.to_prepare do
-  require "redmine_git_remote/repositories_helper_patch"
+ActiveSupport::Reloader.to_prepare do
   RepositoriesHelper.include RedmineGitRemote::RepositoriesHelperPatch
 end
