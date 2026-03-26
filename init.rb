@@ -1,5 +1,7 @@
 require 'redmine'
 
+$LOAD_PATH.unshift File.join(File.dirname(__FILE__), 'lib')
+
 Redmine::Scm::Base.add "GitRemote"
 
 Redmine::Plugin.register :redmine_git_remote do
