@@ -12,4 +12,6 @@ module RedmineGitRemote
                  )
     end
   end
+
+  RepositoriesHelper.send(:include, RepositoriesHelperPatch)
 end
