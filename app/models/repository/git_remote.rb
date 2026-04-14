@@ -152,7 +152,7 @@ class Repository::GitRemote < Repository::Git
 
     # If dir exists and non-empty, should be safe to 'git fetch'
     unless system "git", "--git-dir", clone_path, "fetch", "--all"
-      Rails.logger.warn "Unable to run 'git -c #{clone_path} fetch --all'"
+      Rails.logger.warn "Unable to run 'git --git-dir #{clone_path} fetch --all'"
     end
   end
 
